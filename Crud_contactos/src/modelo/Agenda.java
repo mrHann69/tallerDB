@@ -36,11 +36,7 @@ public class Agenda {
     
     public void modificarContacto(String n, String a, int e, char g, int  pos)
     { 
-        String sql = "UPDATE contactos SET nombre = ?,"
-                                    + " apellido = ?,"
-                                    + "edad = ?,"
-                                    + "genero = ?";
-        sql +=" WHERE contactos.id = ? ";
+        String sql = "UPDATE contactos SET nombre = ?, apellido = ?, edad = ?, genero = ? WHERE id = ? ;";
 
         try {
             PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
@@ -51,7 +47,7 @@ public class Agenda {
             sentencia.setInt(5, pos);
             sentencia.executeQuery();
         } catch (SQLException ee) {
-            System.out.println("Error: "+ ee.getMessage());
+            System.out.println("Error mC: "+ ee.getMessage());
         }
         conexion.ejecutarSQL(sql);
     }

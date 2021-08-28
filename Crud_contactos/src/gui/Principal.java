@@ -5,6 +5,8 @@
  */
 package gui;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import modelo.*;
 
 /**
@@ -203,9 +205,11 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+//        DefaultTableModel datos = (DefaultTableModel)tabla.getModel();
         int pos = tabla.getSelectedRow();
-        pos++;
-        System.out.println("posicion contacto "+pos);
+        
+//        String nom = datos.getValueAt(pos, 0 ).toString();
         
         String nombre = JOptionPane.showInputDialog("introduce nombre: ");
         String apellido = JOptionPane.showInputDialog("introduce apellido: ");
