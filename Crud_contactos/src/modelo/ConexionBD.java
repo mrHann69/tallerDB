@@ -21,7 +21,7 @@ public class ConexionBD {
             
             conexion = DriverManager.getConnection(url, username, password);
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            System.out.println("Error conexion: " + ex.getMessage());
         }
     }
     
@@ -38,14 +38,12 @@ public class ConexionBD {
                 for (int i = 0; i < numCol; i++) {
                     fila[i] = rs.getString(i+1);
                 }
-                
                 tabla.add(fila);
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            System.out.println("Error consulta: " + ex.getMessage());
         }
-        
         return tabla;
     }
     
@@ -54,7 +52,7 @@ public class ConexionBD {
         try {
             Statement s =  conexion.createStatement();
             int numFilas = s.executeUpdate(sql);
-            System.out.println("NumFilas: " + numFilas);
+            System.out.println("eSQL NumFilas: " + numFilas);
             
         } catch (SQLException ex) {
             System.out.println("Error eSQL: " + ex.getMessage());
