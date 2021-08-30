@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package gui;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -70,7 +71,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel4.setText("Género:");
 
         inGenero.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        inGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
+        inGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F" }));
 
         btnAdicionar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnAdicionar.setText("Adicionar");
@@ -102,11 +103,11 @@ public class Principal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Apellido", "Edad", "Género"
+                "ID", "Nombre", "Apellido", "Edad", "Género"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -205,29 +206,27 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        
-//        DefaultTableModel datos = (DefaultTableModel)tabla.getModel();
         int pos = tabla.getSelectedRow();
+        int id = agenda.getContacto(pos).getId();
         
-//        String nom = datos.getValueAt(pos, 0 ).toString();
+        //Tomando los datos alterados para el Update
+        String nombre = inNombre.getText();
+        String apellido = inApellido.getText();
+        int edad = Integer.parseInt(inEdad.getText());
+        char genre = inGenero.getSelectedItem().toString().charAt(0);
+        //char g = (char) inGenero.getSelectedItem();
+        System.out.println("datos IDD: "+ id +" nombre: "+ nombre+" apellido: "+apellido+" edad: "+edad+" genero: "+genre);
+        agenda.modificarContacto(nombre, apellido, edad, genre, id);
         
-        String nombre = JOptionPane.showInputDialog("introduce nombre: ");
-        String apellido = JOptionPane.showInputDialog("introduce apellido: ");
-        int edad = Integer.parseInt(JOptionPane.showInputDialog("introduce edad: "));
-        char genre = JOptionPane.showInputDialog("introduce genero M - F: ").charAt(0);
-        
-        if( edad>0 && 
-            ((genre=='F'||genre=='M')||(genre=='f'||genre=='m')) && 
-            nombre.length()>0 && 
-            apellido.length()>0)
-        {
-                agenda.modificarContacto(nombre, apellido, edad, genre, pos);
-                agenda.mostrarDatos(tabla);
-        }else{
-            JOptionPane.showMessageDialog(rootPane, "Revisa tus datos");
-        } 
+        inNombre.setText("");
+        inApellido.setText("");
+        inEdad.setText("");
+        inGenero.setSelectedIndex(0);
+        agenda.mostrarDatos(tabla);
     }//GEN-LAST:event_btnModificarActionPerformed
 
+
+    
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         int pos = tabla.getSelectedRow();
         Contacto c = agenda.getContacto(pos);

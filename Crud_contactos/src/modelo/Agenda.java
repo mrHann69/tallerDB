@@ -3,6 +3,7 @@ package modelo;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -11,6 +12,14 @@ public class Agenda {
     // Relacion de tiene-un
     private ConexionBD conexion;
     private ArrayList<Contacto> lista;
+
+    public ArrayList<Contacto> getLista() {
+        return lista;
+    }
+
+    public void setLista(ArrayList<Contacto> lista) {
+        this.lista = lista;
+    }
 
     public Agenda() {        
         conexion = new ConexionBD();
@@ -29,28 +38,33 @@ public class Agenda {
             sentencia.setString(4 , String.valueOf(c.getGenero()));
             sentencia.executeQuery();
         } catch (Exception e) {
-            System.out.println("Error: "+ e.getMessage());
+            System.out.println("Error addContact: "+ e.getMessage());
         }
         conexion.ejecutarSQL(sql);
     }
     
-    public void modificarContacto(String n, String a, int e, char g, int  pos)
+    public void modificarContacto(String n, String a, int e, char g, int  id)
     { 
-        String sql = "UPDATE contactos SET nombre = ?, apellido = ?, edad = ?, genero = ? WHERE id = ? ;";
-
+        String sql=null;
+        PreparedStatement sentencia = null;
+        int res = 0;
         try {
-            PreparedStatement sentencia = conexion.getConexion().prepareStatement(sql);
+            sql = "UPDATE contactos SET nombre = '?', apellido = '?', edad = ?, genero = '?' WHERE id = ?;";
+            sentencia = conexion.getConexion().prepareStatement(sql);
             sentencia.setString(1, n);
             sentencia.setString(2, a);
             sentencia.setInt(3, e);
             sentencia.setString(4, String.valueOf(g));
-            sentencia.setInt(5, pos);
-            sentencia.executeQuery();
+            sentencia.setInt(5, id);
+            //conexion.ejecutarSQL(sql);
+            res=sentencia.executeUpdate(sql);   
+            System.out.println("resultado: "+res);
         } catch (SQLException ee) {
-            System.out.println("Error mC: "+ ee.getMessage());
-        }
-        conexion.ejecutarSQL(sql);
+            System.out.println("Error mC: "+ ee.getSQLState()+" "+ee.getLocalizedMessage());
+            System.out.println("mC DATOS - IDD: "+ id +" nombre: "+ n+" apellido: "+a+" edad: "+e+" genero: "+g);
+        }   
     }
+    
     
     public Contacto getContacto(int pos) {
         return lista.get(pos);
@@ -71,18 +85,21 @@ public class Agenda {
             modeloDatos.removeRow(modeloDatos.getRowCount()-1);
         }
         
-        String sql = "SELECT * FROM contactos";
-        ArrayList<String[]> lista = conexion.consultar(sql, 5);   
+        String sql = "SELECT * FROM contactos ORDER BY id ASC;";
+        ArrayList<String[]> otraLista = conexion.consultar(sql, 5);   
         this.lista= new ArrayList();
         
-        for (int i = 0; i < lista.size(); i++) {
-            String[] row =  lista.get(i);
-            Object[] fila = new Object[]{row[1], row[2], row[3], row[4]};
-            this.lista.add(new Contacto(row[1], // nombre
+        for (int i = 0; i < otraLista.size(); i++) {
+            String[] row =  otraLista.get(i);
+            Object[] fila = new Object[]{row[0], row[1], row[2], row[3],row[4]};
+            this.lista.add(new Contacto(Integer.parseInt(row[0]), //ID
+                                        row[1], // nombre
                                         row[2], // apellido
-                                        Integer.parseInt(row[3]), // edad 
+                                        Integer.parseInt(row[3]), //edad
                                         row[4].charAt(0))); // genero
+            System.out.println("mD DATOS - IDD: "+ row[0] +" nombre: "+ row[1]+" apellido: "+row[2]+" edad: "+row[3]+" genero: "+row[4]);
             modeloDatos.addRow(fila);
+
         }
     }
     
