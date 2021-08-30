@@ -45,23 +45,19 @@ public class Agenda {
     
     public void modificarContacto(String n, String a, int e, char g, int  id)
     { 
-        //String sql=null;
         PreparedStatement sentencia = null;
-        int res = 0;
+        int res=0;
         try {
-            String sql = "UPDATE contactos SET nombre = '?', apellido = '?', edad = ?, genero = '?' WHERE id = ?;";
+            String sql = "UPDATE contactos SET nombre = ?, apellido = ?, edad = ?, genero = ? WHERE id = ?;";
             sentencia = conexion.getConexion().prepareStatement(sql);
             sentencia.setString(1, n);
             sentencia.setString(2, a);
             sentencia.setInt(3, e);
             sentencia.setString(4, String.valueOf(g));
+            //sentencia.setString(4, ""+g);
             sentencia.setInt(5, id);
-            //conexion.ejecutarSQL(sql);
             sentencia.executeQuery();
-            sentencia.executeUpdate(sql);
-            
-            //res=sentencia.executeUpdate(sql);   
-            //System.out.println("resultado: "+res);
+
         } catch (SQLException ee) {
             System.out.println("Error mC: "+ ee.getSQLState()+" "+ee.getLocalizedMessage());
         }   

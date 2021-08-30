@@ -209,7 +209,6 @@ public class Principal extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int pos = tabla.getSelectedRow();
         int id = agenda.getContacto(pos).getId();
-        
         //Tomando los datos alterados para el Update
         String nombre = inNombre.getText();
         String apellido = inApellido.getText();
@@ -218,12 +217,13 @@ public class Principal extends javax.swing.JFrame {
         //char g = (char) inGenero.getSelectedItem();
         System.out.println("datos IDD: "+ id +" nombre: "+ nombre+" apellido: "+apellido+" edad: "+edad+" genero: "+genre);
         agenda.modificarContacto(nombre, apellido, edad, genre, id);
+        agenda.mostrarDatos(tabla);
         
         inNombre.setText("");
         inApellido.setText("");
         inEdad.setText("");
         inGenero.setSelectedIndex(0);
-        agenda.mostrarDatos(tabla);
+        
     }//GEN-LAST:event_btnModificarActionPerformed
 
 
