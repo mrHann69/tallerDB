@@ -45,11 +45,11 @@ public class Agenda {
     
     public void modificarContacto(String n, String a, int e, char g, int  id)
     { 
-        String sql=null;
+        //String sql=null;
         PreparedStatement sentencia = null;
         int res = 0;
         try {
-            sql = "UPDATE contactos SET nombre = '?', apellido = '?', edad = ?, genero = '?' WHERE id = ?;";
+            String sql = "UPDATE contactos SET nombre = '?', apellido = '?', edad = ?, genero = '?' WHERE id = ?;";
             sentencia = conexion.getConexion().prepareStatement(sql);
             sentencia.setString(1, n);
             sentencia.setString(2, a);
@@ -57,25 +57,34 @@ public class Agenda {
             sentencia.setString(4, String.valueOf(g));
             sentencia.setInt(5, id);
             //conexion.ejecutarSQL(sql);
-            res=sentencia.executeUpdate(sql);   
-            System.out.println("resultado: "+res);
+            sentencia.executeQuery();
+            sentencia.executeUpdate(sql);
+            
+            //res=sentencia.executeUpdate(sql);   
+            //System.out.println("resultado: "+res);
         } catch (SQLException ee) {
             System.out.println("Error mC: "+ ee.getSQLState()+" "+ee.getLocalizedMessage());
-            System.out.println("mC DATOS - IDD: "+ id +" nombre: "+ n+" apellido: "+a+" edad: "+e+" genero: "+g);
         }   
     }
-    
+
     
     public Contacto getContacto(int pos) {
         return lista.get(pos);
     }
     
     
-    public void borrarContacto(int pos)
+    public void borrarContacto(int id)
     {
-        String sql = "DELETE ... ";
-        
-        conexion.ejecutarSQL(sql);
+        PreparedStatement psmt =null;
+        try {
+            String sql = "DELETE FROM contactos WHERE id= ?";
+            psmt = conexion.getConexion().prepareStatement(sql);
+            psmt.setInt(1, id);
+            psmt.executeQuery();
+            //conexion.ejecutarSQL(sql);
+        } catch (Exception e) {
+            System.out.println("Error bC: "+e.getLocalizedMessage());
+        }
     }
 
     public void mostrarDatos(JTable tabla) {
@@ -97,7 +106,7 @@ public class Agenda {
                                         row[2], // apellido
                                         Integer.parseInt(row[3]), //edad
                                         row[4].charAt(0))); // genero
-            System.out.println("mD DATOS - IDD: "+ row[0] +" nombre: "+ row[1]+" apellido: "+row[2]+" edad: "+row[3]+" genero: "+row[4]);
+            //System.out.println("mD DATOS - IDD: "+ row[0] +" nombre: "+ row[1]+" apellido: "+row[2]+" edad: "+row[3]+" genero: "+row[4]);
             modeloDatos.addRow(fila);
 
         }

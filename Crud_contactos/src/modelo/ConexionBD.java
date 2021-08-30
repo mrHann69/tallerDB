@@ -38,7 +38,6 @@ public class ConexionBD {
                 for (int i = 0; i < numCol; i++) {
                     fila[i] = rs.getString(i+1);
                 }
-                System.out.println("consultar: "+fila[0]+" "+fila[1]);
                 tabla.add(fila);
             }
             

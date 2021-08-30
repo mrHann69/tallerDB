@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package gui;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -243,10 +244,15 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaMouseClicked
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        
-        
-        
-        
+        int pos = tabla.getSelectedRow();
+        int id = agenda.getContacto(pos).getId();
+        agenda.borrarContacto(id);
+        agenda.mostrarDatos(tabla);
+        inNombre.setText("");
+        inApellido.setText("");
+        inEdad.setText("");
+        inGenero.setSelectedIndex(0);
+        agenda.mostrarDatos(tabla);
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     /**
