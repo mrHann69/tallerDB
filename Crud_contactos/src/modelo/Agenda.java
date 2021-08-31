@@ -37,7 +37,7 @@ public class Agenda {
             sentencia.setInt(3 , c.getEdad());
             sentencia.setString(4 , String.valueOf(c.getGenero()));
             sentencia.executeQuery();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error addContact: "+ e.getMessage());
         }
         conexion.ejecutarSQL(sql);
@@ -46,7 +46,6 @@ public class Agenda {
     public void modificarContacto(String n, String a, int e, char g, int  id)
     { 
         PreparedStatement sentencia = null;
-        int res=0;
         try {
             String sql = "UPDATE contactos SET nombre = ?, apellido = ?, edad = ?, genero = ? WHERE id = ?;";
             sentencia = conexion.getConexion().prepareStatement(sql);
@@ -54,7 +53,6 @@ public class Agenda {
             sentencia.setString(2, a);
             sentencia.setInt(3, e);
             sentencia.setString(4, String.valueOf(g));
-            //sentencia.setString(4, ""+g);
             sentencia.setInt(5, id);
             sentencia.executeQuery();
 
@@ -77,23 +75,19 @@ public class Agenda {
             psmt = conexion.getConexion().prepareStatement(sql);
             psmt.setInt(1, id);
             psmt.executeQuery();
-            //conexion.ejecutarSQL(sql);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error bC: "+e.getLocalizedMessage());
         }
     }
 
     public void mostrarDatos(JTable tabla) {
-        DefaultTableModel modeloDatos = (DefaultTableModel)tabla.getModel();
-        
+        DefaultTableModel modeloDatos = (DefaultTableModel)tabla.getModel(); 
         while (modeloDatos.getRowCount() > 0) {
             modeloDatos.removeRow(modeloDatos.getRowCount()-1);
         }
-        
         String sql = "SELECT * FROM contactos ORDER BY id ASC;";
         ArrayList<String[]> otraLista = conexion.consultar(sql, 5);   
-        this.lista= new ArrayList();
-        
+        this.lista= new ArrayList(); 
         for (int i = 0; i < otraLista.size(); i++) {
             String[] row =  otraLista.get(i);
             Object[] fila = new Object[]{row[0], row[1], row[2], row[3],row[4]};
@@ -102,9 +96,7 @@ public class Agenda {
                                         row[2], // apellido
                                         Integer.parseInt(row[3]), //edad
                                         row[4].charAt(0))); // genero
-            //System.out.println("mD DATOS - IDD: "+ row[0] +" nombre: "+ row[1]+" apellido: "+row[2]+" edad: "+row[3]+" genero: "+row[4]);
             modeloDatos.addRow(fila);
-
         }
     }
     
